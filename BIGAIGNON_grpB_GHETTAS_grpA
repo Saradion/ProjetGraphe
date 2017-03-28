@@ -1,0 +1,158 @@
+Tri topologique
+tri_topologique dag1;;
+s b j n q k p g i h f d c o m l e r 
+Toutes les conditions sont respectees 
+tri_topologique dag2;;
+a n j o r f e h x i c b 
+Toutes les conditions sont respectees 
+tri_topologique dag3;;
+d g j n k l f a m c v e i h 
+Toutes les conditions sont respectees 
+tri_topologique dag4;;
+g a u t s m l k j i h b c d e f o p q r n 
+Toutes les conditions sont respectees 
+Ordonnancement non pondéré avec ressources multiples (3 ressources)
+ordonnanceur_multi 3 dag1;;
+s p k 
+g h b 
+c j i 
+d f e 
+l o n 
+m q r 
+
+L'ordre partiel n'est pas respecte
+ordonnanceur_multi 3 dag2;;
+a j n 
+o r e 
+x i b 
+c h f 
+
+L'ordre partiel n'est pas respecte
+ordonnanceur_multi 3 dag3;;
+d g j 
+l n a 
+v f c 
+i k m 
+e h 
+L'ordre partiel n'est pas respecte
+ordonnanceur_multi 3 dag4;;
+g g s 
+t u a 
+a b b 
+c c d 
+d e e 
+f f o 
+o p p 
+q q r 
+r h i 
+j k l 
+m n n 
+n 
+L'ordre partiel n'est pas respecte
+Ordonnancement non pondéré avec ressources multiples (4 ressources)
+ordonnanceur_multi 4 dag1;;
+s p k g 
+h b c j 
+i d f e 
+l o n m 
+q r 
+L'ordre partiel n'est pas respecte
+ordonnanceur_multi 4 dag2;;
+a n o r 
+e x i b 
+c h j f 
+
+L'ordre partiel n'est pas respecte
+ordonnanceur_multi 4 dag3;;
+l n a v 
+f c i k 
+m e h 
+L'ordre partiel n'est pas respecte
+ordonnanceur_multi 4 dag4;;
+g g m s 
+t u a a 
+b b c c 
+d d e e 
+f f o o 
+p p q q 
+r r h i 
+j k l n 
+n n 
+L'ordre partiel n'est pas respecte
+Ordonnancement hétérogène pondéré
+ordonnanceur_heterogene 10.0 2 2 dag1;;
+s p p k 
+k g g h 
+h b c j 
+i d d f 
+f e l o 
+o n n m 
+m q q r 
+
+L'ordre partiel n'est pas respecte
+ordonnanceur_heterogene 10.0 2 2 dag2;;
+a j j n 
+o o o r 
+r e x x 
+x i b c 
+c h h f 
+
+L'ordre partiel n'est pas respecte
+ordonnanceur_heterogene 10.0 2 2 dag3;;
+k d d g 
+g j j l 
+m e n a 
+a v v h 
+f f f c 
+c i 
+L'ordre partiel n'est pas respecte
+ordonnanceur_heterogene 10.0 2 2 dag4;;
+g g l m 
+m s s t 
+t u u a 
+a a b b 
+c c d d 
+e e f f 
+o o p p 
+q q r r 
+h h h i 
+i j j k 
+k n n n 
+n n 
+L'ordre partiel n'est pas respecte
+Ordonnancement hétérogène pondéré avec accélération
+ordonnanceur_heterogene_quick 10.0 2 2 dag1;;
+s p k g 
+h b c j 
+i d f e 
+e l o n 
+m q r 
+L'ordre partiel n'est pas respecte
+Stagnation ou amelioration
+ordonnanceur_heterogene_quick 10.0 2 2 dag2;;
+a j n o 
+o r f e 
+x i b c 
+c h 
+L'ordre partiel n'est pas respecte
+Stagnation ou amelioration
+ordonnanceur_heterogene_quick 10.0 2 2 dag3;;
+n a g f 
+c j l v 
+v i m e 
+e h 
+L'ordre partiel n'est pas respecte
+Stagnation ou amelioration
+ordonnanceur_heterogene_quick 10.0 2 2 dag4;;
+g g k k 
+k l m s 
+t u a a 
+a b b c 
+c d d e 
+e f f o 
+o p p q 
+q r r h 
+h i j n 
+n n 
+L'ordre partiel n'est pas respecte
+Stagnation ou amelioration
