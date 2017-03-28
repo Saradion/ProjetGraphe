@@ -1,4 +1,4 @@
-open Dag;;
+open Dag.Dag;;
 
 (********** Definitions de fonctions utilitaires **********)
 
@@ -21,6 +21,20 @@ let rec remove l e =
     match l with
     | [] -> []
     | h::t -> if (h == e) then t else (remove t e);;
+
+let print_trace t =
+    let print_list l =
+        begin
+            Format.printf "[";
+            List.iter (fun e -> Format.printf "%s " (namev e)) l;
+            Format.printf "]";
+        end
+    in
+        begin
+            Format.printf "[";
+            List.iter print_list t;
+            Format.printf "]";
+        end;;
 (**********************************************************)
 
 
@@ -49,34 +63,86 @@ let tri_topologique g =
 
 
 (************** Algorithme d'ordonnancement ***************)
-type trace = (Dag.t list) list
+type trace = (V.t list) list
 
-(* Calcul d'étape : on prend la liste des étapes non terminées,
- * on regarde la première. Si on a suffisamment de ressources, on met le cout
- * courant de la tâche à 0, puis *)
-let rec step r_available g l =
-    match l with
-    | []   -> []
-    | h::t -> 
-        if (r_available > (currcostv h)) then
-            begin
-            let r = r_available -. (currcostv h) in
-            decreasev h (currcostv h);
-            Format.printf "%f " r;
-            h::(step r g t)
-            end
-        else 
-            begin
-            decreasev h r_available;
-            [h]
-            end;;
+let rec step r g =
+    if is_empty g then
+        []
+    else if r = 0 then
+        []
+    else
+        let y = sources g in
+        match y with
+        | []   -> failwith "Not a DAG!"
+        | h::t -> match computedv h with
+            | true -> (remove_vertex g h; step r g)
+            | false -> (decreasev h 1.; h::(step (r-1) g));;
 
 let ordonnanceur_multi r g =
-    let rec ord_aux r g l =
-    match l with
-    | [] -> []
-    | _  -> let s = (step r g l) in
-            let l = (List.fold_left (fun l1 e1 -> if (computedv e1) then (remove l1 e1) else l1) l s) in
-            s::(ord_aux r g l) in
-    ord_aux r g (tri_topologique g);;
-(**********************************************************)
+    let rec aux r g =
+        if is_empty g then
+            []
+        else
+           let s = step r g in
+           s::(aux r g) in
+    aux r g;;
+
+
+let decrease v res_type alpha =
+    if (typeressv v) = res_type then
+        decreasev v 1.
+    else
+        decreasev v (1./.alpha);;
+
+let rec step_bis alpha r1 r2 g =
+    if is_empty g then
+        []
+    else if r1 = 0 && r2 = 0 then
+        []
+    else
+        let y = sources g in
+        match y with
+        | []   -> failwith "Not a DAG!"
+        | h::t -> match computedv h with
+            | true -> (remove_vertex g h; step_bis alpha r1 r2 g)
+            | false -> 
+                if r1 = 0 then
+                    (decrease h 2 alpha; h::(step_bis alpha r1 (r2-1) g))
+                else
+                    (decrease h 1 alpha; h::(step_bis alpha (r1-1) r2 g));;
+
+let ordonnanceur_heterogene alpha r1 r2 g =
+    let rec aux alpha r1 r2 g =
+        if is_empty g then
+            []
+        else
+           let s = step_bis alpha r1 r2 g in
+           s::(aux alpha r1 r2 g) in
+    aux alpha r1 r2 g;;
+
+let rec step_ter alpha r1 r2 g =
+    if is_empty g then
+        []
+    else if r1 = 0 && r2 = 0 then
+        []
+    else
+        let y = sources g in
+        match y with
+        | []   -> failwith "Not a DAG!"
+        | h::t -> match computedv h with
+            | true -> (remove_vertex g h; step_ter alpha r1 r2 g)
+            | false -> let res_type = typeressv h in
+                if (res_type = 1 && r1 != 0) || (res_type = 2 && r2 = 0) then
+                    (decrease h 1 alpha; h::(step_ter alpha (r1-1) r2 g))
+                else
+                    (decrease h 2 alpha; h::(step_ter alpha r1 (r2-1) g));;
+
+let ordonnanceur_heterogene_quick alpha r1 r2 g =
+    let rec aux alpha r1 r2 g =
+        if is_empty g then
+            []
+        else
+           let s = step_ter alpha r1 r2 g in
+           s::(aux alpha r1 r2 g) in
+    aux alpha r1 r2 g;;
+
